@@ -12,9 +12,14 @@ def base_ll():
         ll.insert_tail(data)
     return ll
 
+def test_repr(base_ll):
+    assert(repr(base_ll) == "0 {data: 0} -> 1 {data: 1} -> "\
+        "2 {data: 2} -> 3 {data: 3} -> 4 {data: 4} -> 5 {data: 5}")
+
 def test_insert_invalid(empty_ll_setup):
     ll, iters = empty_ll_setup
     assert(ll.is_empty())
+    assert(ll.index_of(0) == -1)
     for i in range(-iters//2, 0):
         with pytest.raises(AssertionError):
             ll.insert(i, 0)
@@ -54,7 +59,7 @@ def test_remove_invalid(empty_ll_setup):
 
 def test_remove_only_element():
     ll = LinkedList()
-    for data in [0, "a", 1.5, [], {}]:
+    for data in [0, "a", 1.5, [], {}, LinkedList()]:
         ll.insert(0, data)
         assert(not ll.is_empty())
         assert(id(ll.peek_head()) == id(ll.peek_tail()))
@@ -92,9 +97,13 @@ def test_remove_inner(base_ll):
 def test_insert_and_remove():
     ll = LinkedList()
     ll.insert(0, 4)
+    assert(ll.peek_all() == [4])
     ll.insert(1, 3)
+    assert(ll.peek_all() == [4, 3])
     ll.insert(1, 2)
+    assert(ll.peek_all() == [4, 2, 3])
     ll.insert(2, 0)
+    assert(ll.peek_all() == [4, 2, 0, 3])
     ll.insert(0, 5)
     assert(ll.peek_all() == [5, 4, 2, 0, 3])
     expected = ll.remove(3)

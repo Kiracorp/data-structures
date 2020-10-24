@@ -12,6 +12,19 @@ class LinkedList:
         self.tail = None
         self.size = 0
 
+    def __len__(self):
+        return self.size
+
+    def __repr__(self):
+        if self.is_empty(): return "Empty"
+        else:
+            node_strs = []
+            curr_node = self.head
+            for curr_index in range(self.size):
+                node_strs.append(f"{curr_index} {repr(curr_node)}")
+                curr_node = curr_node.next
+            return " -> ".join(node_strs)
+
     def is_empty(self):
         return self.size == 0 and self.head is None and self.tail is None
     
@@ -98,16 +111,3 @@ class LinkedList:
             lst.append(curr.data)
             curr = curr.next
         return lst
-
-    def __len__(self):
-        return self.size
-
-    def __repr__(self):
-        if self.is_empty(): return "Empty"
-        else:
-            node_strs = []
-            curr_node = self.head
-            for curr_index in range(self.size):
-                node_strs.append(f"{curr_index} {repr(curr_node)}")
-                curr_node = curr_node.next
-            return " -> ".join(node_strs)
