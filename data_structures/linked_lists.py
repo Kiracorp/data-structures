@@ -68,7 +68,7 @@ class LinkedList:
     def insert_tail(self, data):
         self.insert(self.size, data)
 
-    def remove(self, index):
+    def pop(self, index):
         assert(not self.is_empty())
         assert(index >= 0 and index < len(self))
         # Case 0 - Only one element
@@ -96,11 +96,11 @@ class LinkedList:
         self.size -= 1
         return out
 
-    def remove_head(self):
-        return self.remove(0)
+    def pop_head(self):
+        return self.pop(0)
 
-    def remove_tail(self):
-        return self.remove(len(self)-1)
+    def pop_tail(self):
+        return self.pop(len(self)-1)
 
     def peek(self, index):
         assert(not self.is_empty())

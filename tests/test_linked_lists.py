@@ -43,15 +43,15 @@ def test_insert_invalid():
             ll.insert(i, 0)
     assert(ll.is_empty())
 
-def test_remove_invalid():
+def test_pop_invalid():
     ll = LinkedList()
     with pytest.raises(AssertionError):
-        ll.remove(0)
+        ll.pop(0)
     ll.insert(0, 0)
     for i in range(-ITERS//2, ITERS//2+1):
         if i == 0: continue
         with pytest.raises(AssertionError):
-            ll.remove(i)
+            ll.pop(i)
 
 def test_peek_invalid():
     ll = LinkedList()
@@ -77,27 +77,27 @@ def test_insert_tail():
         assert(len(ll) == i+1)
         assert(ll.peek_tail() == i)
 
-def test_remove_head(base_ll):
+def test_pop_head(base_ll):
     ll = base_ll
     for expected in range(len(ll)):
-        actual = ll.remove_head()
+        actual = ll.pop_head()
         assert(expected == actual)
     assert(ll.is_empty())
 
-def test_remove_tail(base_ll):
+def test_pop_tail(base_ll):
     ll = base_ll
     for expected in range(len(ll)-1, -1, -1):
-        actual = ll.remove_tail()
+        actual = ll.pop_tail()
         assert(actual == expected)
     assert(ll.is_empty())
 
-def test_remove_only_element():
+def test_pop_only_element():
     ll = LinkedList()
     for data in [0, "a", 1.5, [], {}, LinkedList()]:
         ll.insert(0, data)
         assert(not ll.is_empty())
         assert(id(ll.peek_head()) == id(ll.peek_tail()))
-        actual = ll.remove(0)
+        actual = ll.pop(0)
         assert(ll.is_empty())
         assert(actual == data)
 
@@ -117,7 +117,7 @@ def test_random_ops():
     for i in range(ITERS, 0, -1):
         index = random.randrange(i)
         actual = arr.pop(index)
-        expected = ll.remove(index)
+        expected = ll.pop(index)
         assert(actual == expected)
         assert(ll.to_array() == arr)
     assert(ll.is_empty() and len(arr) == 0)
