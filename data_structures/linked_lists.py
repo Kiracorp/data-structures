@@ -15,6 +15,10 @@ class LinkedList:
     def __len__(self):
         return self.size
 
+    def __eq__(self, other):
+        if len(self) != len(other): return False
+        return self.to_array() == other.to_array()
+
     def __repr__(self):
         if self.is_empty(): return "Empty"
         else:
@@ -38,7 +42,7 @@ class LinkedList:
         return -1
 
     def insert(self, index, data):
-        assert(index >= 0 and index <= self.size)
+        assert(index >= 0 and index <= len(self))
         node = self.Node(data)
         # Case 0 - No head exists
         if self.is_empty():
@@ -48,7 +52,7 @@ class LinkedList:
         elif index == 0:
             self.head, node.next = node, self.head
         # Case 2 - Add to tail
-        elif index == self.size:
+        elif index == len(self):
             self.tail.next, self.tail = node, node
         # Case 3 - Insertion in between elements
         else:
@@ -66,18 +70,19 @@ class LinkedList:
 
     def remove(self, index):
         assert(not self.is_empty())
-        assert(index >= 0 and index < self.size)
-        data = None
+        assert(index >= 0 and index < len(self))
         # Case 0 - Only one element
-        if self.size == 1:
-            data = self.head.data
-            self.head, self.tail = None, None
+        if len(self) == 1:
+            out = self.head.data
+            self.head = self.tail = None
         # Case 1 - Removing head
         elif index == 0:
-            data, self.head = self.head.data, self.head.next
+            out = self.head.data
+            self.head = self.head.next
         # Case 2 - Removing tail
-        elif index == self.size-1:
-            prev, data = self.head, self.tail.data
+        elif index == len(self)-1:
+            out = self.tail.data
+            prev = self.head
             for _ in range(index-1):
                 prev = prev.next
             self.tail, prev.next = prev, None
@@ -86,25 +91,34 @@ class LinkedList:
             prev = self.head
             for _ in range(index-1):
                 prev = prev.next
-            prev.next, data = prev.next.next, prev.next.data
+            out = prev.next.data
+            prev.next = prev.next.next
         self.size -= 1
-        return data
+        return out
 
     def remove_head(self):
         return self.remove(0)
 
     def remove_tail(self):
-        return self.remove(self.size-1)
+        return self.remove(len(self)-1)
+
+    def peek(self, index):
+        assert(not self.is_empty())
+        assert(index >= 0 and index < len(self))
+        if index == len(self)-1:
+            return self.tail.data
+        curr = self.head
+        for _ in range(index):
+            curr = curr.next
+        return curr.data
 
     def peek_head(self):
-        if self.is_empty(): return None
-        return self.head.data
+        return self.peek(0)
     
     def peek_tail(self):
-        if self.is_empty(): return None
-        return self.tail.data
+        return self.peek(len(self)-1)
 
-    def peek_all(self):
+    def to_array(self):
         if self.is_empty(): return []
         curr, lst = self.head, []
         while curr is not None:
