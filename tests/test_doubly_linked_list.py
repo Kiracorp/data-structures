@@ -1,24 +1,25 @@
-from data_structures import LinkedList
+from data_structures import DoublyLinkedList
 import pytest, random
 
 ITERS = 100
 
 @pytest.fixture
 def base_ll():
-    ll = LinkedList()
+    ll = DoublyLinkedList()
     for i in range(ITERS):
         ll.insert_tail(i)
     return ll
 
 def test_repr():
-    ll = LinkedList()
+    ll = DoublyLinkedList()
+    assert(repr(ll) == "Empty")
     for i in range(5):
         ll.insert_tail(i)
-    assert(repr(ll) == "0 {data: 0} -> 1 {data: 1} -> "\
-        "2 {data: 2} -> 3 {data: 3} -> 4 {data: 4}")
+    assert(repr(ll) == "0 {data: 0} <-> 1 {data: 1} <-> "\
+        "2 {data: 2} <-> 3 {data: 3} <-> 4 {data: 4}")
 
 def test_ll_equality():
-    ll1, ll2 = LinkedList(), LinkedList()
+    ll1, ll2 = DoublyLinkedList(), DoublyLinkedList()
     for i in range(ITERS): 
         ll1.insert_head(i)
         ll2.insert_head(i)
@@ -34,7 +35,7 @@ def test_index_of(base_ll):
     assert(ll.index_of(len(ll)) == -1)
 
 def test_insert_invalid():
-    ll = LinkedList()
+    ll = DoublyLinkedList()
     for i in range(-ITERS//2, 0):
         with pytest.raises(AssertionError):
             ll.insert(i, 0)
@@ -44,7 +45,7 @@ def test_insert_invalid():
     assert(ll.is_empty())
 
 def test_pop_invalid():
-    ll = LinkedList()
+    ll = DoublyLinkedList()
     with pytest.raises(AssertionError):
         ll.pop(0)
     ll.insert(0, 0)
@@ -54,7 +55,7 @@ def test_pop_invalid():
             ll.pop(i)
 
 def test_peek_invalid():
-    ll = LinkedList()
+    ll = DoublyLinkedList()
     with pytest.raises(AssertionError):
         ll.peek(0)
     ll.insert(0, 0)
@@ -64,18 +65,28 @@ def test_peek_invalid():
             ll.peek(i)
 
 def test_insert_head():
-    ll = LinkedList()
+    ll = DoublyLinkedList()
     for i in range(ITERS):
         ll.insert_head(i)
         assert(len(ll) == i+1)
         assert(ll.peek_head() == i)
 
 def test_insert_tail():
-    ll = LinkedList()
+    ll = DoublyLinkedList()
     for i in range(ITERS):
         ll.insert_tail(i)
         assert(len(ll) == i+1)
         assert(ll.peek_tail() == i)
+
+def test_pop_only_element():
+    ll = DoublyLinkedList()
+    for data in [0, "a", 1.5, [], {}, DoublyLinkedList()]:
+        ll.insert(0, data)
+        assert(not ll.is_empty())
+        assert(id(ll.peek_head()) == id(ll.peek_tail()))
+        actual = ll.pop(0)
+        assert(ll.is_empty())
+        assert(actual == data)
 
 def test_pop_head(base_ll):
     ll = base_ll
@@ -91,18 +102,18 @@ def test_pop_tail(base_ll):
         assert(actual == expected)
     assert(ll.is_empty())
 
-def test_pop_only_element():
-    ll = LinkedList()
-    for data in [0, "a", 1.5, [], {}, LinkedList()]:
-        ll.insert(0, data)
-        assert(not ll.is_empty())
-        assert(id(ll.peek_head()) == id(ll.peek_tail()))
-        actual = ll.pop(0)
-        assert(ll.is_empty())
-        assert(actual == data)
+def test_reverse():
+    ll, arr = DoublyLinkedList(), []
+    for i in range(ITERS):
+        if i != 0:
+            ll.insert(0, i)
+            arr.insert(0, i)
+        ll.reverse()
+        arr = arr[::-1]
+        assert(ll.to_array() == arr)
 
 def test_random_ops():
-    ll, arr = LinkedList(), []
+    ll, arr = DoublyLinkedList(), []
     for i in range(ITERS):
         index = random.randrange(i+1)
         data = random.randrange(5000)

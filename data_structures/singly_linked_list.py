@@ -1,4 +1,6 @@
-class LinkedList:
+from .abstract_linked_list import LinkedList
+
+class SinglyLinkedList(LinkedList):
     class Node:
         def __init__(self, data):
             self.data = data
@@ -6,18 +8,6 @@ class LinkedList:
 
         def __repr__(self):
             return f"{{data: {repr(self.data)}}}"
-
-    def __init__(self):
-        self.head = None
-        self.tail = None
-        self.size = 0
-
-    def __len__(self):
-        return self.size
-
-    def __eq__(self, other):
-        if len(self) != len(other): return False
-        return self.to_array() == other.to_array()
 
     def __repr__(self):
         if self.is_empty(): return "Empty"
@@ -29,25 +19,12 @@ class LinkedList:
                 curr_node = curr_node.next
             return " -> ".join(node_strs)
 
-    def is_empty(self):
-        return self.size == 0 and self.head is None and self.tail is None
-    
-    def index_of(self, data):
-        curr, i = self.head, 0
-        while curr is not None:
-            if curr.data == data:
-                return i
-            curr = curr.next
-            i += 1
-        return -1
-
     def insert(self, index, data):
         assert(index >= 0 and index <= len(self))
         node = self.Node(data)
         # Case 0 - No head exists
         if self.is_empty():
-            self.head = node
-            self.tail = node
+            self.head = self.tail = node
         # Case 1 - Add to start
         elif index == 0:
             self.head, node.next = node, self.head
@@ -61,12 +38,6 @@ class LinkedList:
                 prev = prev.next
             prev.next, node.next = node, prev.next
         self.size += 1
-
-    def insert_head(self, data):
-        self.insert(0, data)
-    
-    def insert_tail(self, data):
-        self.insert(self.size, data)
 
     def pop(self, index):
         assert(not self.is_empty())
@@ -96,12 +67,6 @@ class LinkedList:
         self.size -= 1
         return out
 
-    def pop_head(self):
-        return self.pop(0)
-
-    def pop_tail(self):
-        return self.pop(len(self)-1)
-
     def peek(self, index):
         assert(not self.is_empty())
         assert(index >= 0 and index < len(self))
@@ -112,16 +77,11 @@ class LinkedList:
             curr = curr.next
         return curr.data
 
-    def peek_head(self):
-        return self.peek(0)
-    
-    def peek_tail(self):
-        return self.peek(len(self)-1)
-
-    def to_array(self):
-        if self.is_empty(): return []
-        curr, lst = self.head, []
-        while curr is not None:
-            lst.append(curr.data)
-            curr = curr.next
-        return lst
+    def reverse(self):
+        if len(self) < 2: return
+        curr, nxt = None, self.head
+        self.tail = nxt
+        while nxt is not None:
+            prev, curr, nxt = curr, nxt, nxt.next
+            curr.next = prev
+        self.head = curr
