@@ -10,6 +10,31 @@ class DoublyLinkedList(LinkedList):
         def __repr__(self):
             return f"{{data: {repr(self.data)}}}"
 
+    class Bidirectional_Iterator(object):
+        def __init__(self, dll):
+            self.dll = dll
+            self.curr = dll.head
+
+        def has_next(self):
+            return self.curr.next is not None
+
+        def has_prev(self):
+            return self.curr.prev is not None
+            
+        def next(self):
+            if self.has_next():
+                self.curr = self.curr.next
+                return self.curr.data
+            else:
+                raise StopIteration
+
+        def prev(self):
+            if self.has_prev():
+                self.curr = self.curr.prev
+                return self.curr.data
+            else:
+                raise StopIteration
+
     def __repr__(self):
         if self.is_empty(): return "Empty"
         else:
