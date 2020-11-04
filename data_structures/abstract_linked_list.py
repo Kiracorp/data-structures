@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 class LinkedList(ABC):
     @abstractmethod
-    def insert(self, index): pass # pragma: no cover
+    def insert(self, index, data): pass # pragma: no cover
 
     @abstractmethod
     def pop(self, index): pass # pragma: no cover

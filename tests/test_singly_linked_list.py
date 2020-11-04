@@ -1,7 +1,6 @@
 from data_structures import SinglyLinkedList
+from .parameters import *
 import pytest, random
-
-ITERS = 100
 
 @pytest.fixture
 def base_ll():
@@ -116,7 +115,7 @@ def test_random_ops():
     ll, arr = SinglyLinkedList(), []
     for i in range(ITERS):
         index = random.randrange(i+1)
-        data = random.randrange(5000)
+        data = random.randrange(MAX_VAL)
         ll.insert(index, data)
         arr.insert(index, data)
         assert(ll.to_array() == arr)
